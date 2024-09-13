@@ -1,7 +1,7 @@
 {
   "name": "how_to_integrate_ai_into_ui",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
