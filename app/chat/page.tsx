@@ -13,44 +13,50 @@ export default function Home() {
   const [conversation, setConversation] = useUIState()
   const { continueConversation } = useActions()
 
+  const handleSubmit = async (event: any) => {
+    setConversation((currentConversation: ClientMessage[]) => [
+      ...currentConversation,
+      { id: generateId(), role: 'user', display: input },
+    ])
+    const message = await continueConversation(input)
+    setConversation((currentConversation: ClientMessage[]) => [
+      ...currentConversation,
+      message,
+    ])
+    setInput('')
+  }
+
   return (
     <div>
-      <div>
-        {conversation.map((message: ClientMessage) => (
-          <div key={message.id}>
-            {message.role}: {message.display}
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <input
-          type="text"
-          value={input}
-          className="text-gray-900"
-          onChange={(event) => {
-            setInput(event.target.value)
-          }}
-        />
-        <button
-          onClick={async (e) => {
-            e.preventDefault()
-            setConversation((currentConversation: ClientMessage[]) => [
-              ...currentConversation,
-              { id: generateId(), role: 'user', display: input },
-            ])
-            console.log('continueConversation >> input: ' + input)
-            const message = await continueConversation(input)
-            console.log('message: ', message)
-            setConversation((currentConversation: ClientMessage[]) => [
-              ...currentConversation,
-              message,
-            ])
-            setInput('')
-          }}
-        >
-          Send Message
-        </button>
+      <div className="mx-auto w-full bg-gray-800 px-4 py-8 sm:w-[760px]">
+        <div>
+          {conversation.map((message: ClientMessage) => (
+            <div key={message.id} className="flex">
+              {message.role}: {message.display}
+            </div>
+          ))}
+        </div>
+        <div className="my-4 flex caret-black">
+          <input
+            type="text"
+            value={input}
+            className="min-w-[400px] rounded-xl px-2 text-gray-900"
+            onChange={(event) => {
+              setInput(event.target.value)
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleSubmit(event)
+              }
+            }}
+          />
+          <button
+            className="ml-2 rounded-xl bg-green-800 p-2 text-gray-100"
+            onClick={handleSubmit}
+          >
+            Send Message
+          </button>
+        </div>
       </div>
     </div>
   )
