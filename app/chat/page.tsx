@@ -13,7 +13,7 @@ export default function Home() {
   const [conversation, setConversation] = useUIState()
   const { continueConversation } = useActions()
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async () => {
     setConversation((currentConversation: ClientMessage[]) => [
       ...currentConversation,
       { id: generateId(), role: 'user', display: input },
@@ -46,7 +46,7 @@ export default function Home() {
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
-                handleSubmit(event)
+                handleSubmit()
               }
             }}
           />
